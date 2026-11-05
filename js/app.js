@@ -1,8 +1,25 @@
-const views=[...document.querySelectorAll('.view')], nav=[...document.querySelectorAll('.nav')];
-function show(id){views.forEach(v=>v.classList.toggle('active',v.id===id));nav.forEach(n=>n.classList.toggle('active',n.dataset.view===id));document.body.classList.remove('aside-open');window.scrollTo({top:0,behavior:'smooth'});if(id==='m1'||id==='m2') localStorage.setItem('c4_last_module',id);}
-document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
-nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
-document.getElementById('menuBtn').addEventListener('click',()=>document.body.classList.toggle('aside-open'));
-document.querySelectorAll('.check').forEach(btn=>btn.addEventListener('click',()=>{const q=btn.closest('.quiz'),selected=q.querySelector('input:checked'),feedback=q.querySelector('.feedback');if(!selected){feedback.textContent='Selecciona una respuesta para continuar.';feedback.style.color='#b7791f';return;}const correct=selected.value===btn.dataset.answer;feedback.textContent=correct?'✓ ¡Correcto! '+(btn.dataset.module==='m1'?'Gestionar es reconocer y elegir una respuesta consciente.':'Clarificar permite comprender el significado antes de asumir.'):'✕ Revisa el contenido del módulo e inténtalo nuevamente.';feedback.style.color=correct?'#148d80':'#b64a4a';if(correct){localStorage.setItem('c4_'+btn.dataset.module+'_practice','done');updateProgress();}}));
-function updateProgress(){const count=['m1','m2'].filter(m=>localStorage.getItem('c4_'+m+'_practice')==='done').length;document.getElementById('progressLabel').textContent=count+' de 2 prácticas completadas';}
-updateProgress();
+
+const toggle = document.getElementById('menuToggle');
+const sidebar = document.getElementById('sidebar');
+if (toggle && sidebar) {
+  toggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  sidebar.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+}
+const links = [...document.querySelectorAll('.nav-link')];
+const sections = [...document.querySelectorAll('#presentacion, #modulo-emociones, #modulo-comunicacion')];
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+      }
+    });
+  }, {rootMargin: '-20% 0px -65% 0px'});
+  sections.forEach(section => observer.observe(section));
+}
