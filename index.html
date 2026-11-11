@@ -17,6 +17,8 @@
   <div class="side-title">MÓDULOS</div>
   <button class="nav" data-view="m1">01 <span>Habilidades emocionales</span></button>
   <button class="nav" data-view="m2">02 <span>Habilidades comunicativas</span></button>
+  <div class="side-title admin-side-title">GESTIÓN INTERNA</div>
+  <button class="nav admin-nav" data-view="admin">⚙ <span>Administración</span></button>
   <div class="side-note">Material de familiarización para personal nuevo. Avanza a tu ritmo.</div>
 </aside>
 <main id="main">
@@ -87,7 +89,31 @@
   <button class="primary next" data-go="home">Volver al inicio ↗</button>
 </section>
 <footer><span>CAPACITACIÓN PSICOSOCIAL · C4 · LÍNEA 123</span><span>Material de familiarización</span></footer>
+
+<section class="view" id="admin">
+  <div class="module-hero admin-hero"><div class="eyebrow">ÁREA RESTRINGIDA · EQUIPO DE CAPACITACIÓN</div><h1>Administración<br>de resultados</h1><p>Consulta los registros de evaluación y descarga reportes de participantes. El acceso requiere autenticación y permisos configurados en Supabase.</p><div class="module-meta"><span>▦ Participantes</span><span>✓ Calificaciones</span><span>↓ CSV y Excel</span></div></div>
+  <div class="admin-login panel" id="adminLoginPanel">
+    <div class="eyebrow">ACCESO ADMINISTRATIVO</div><h2>Ingresar al panel</h2><p>Utiliza el correo y la contraseña de un usuario autorizado en Supabase Authentication.</p>
+    <form id="adminLoginForm" class="admin-login-form"><label>Correo electrónico<input id="adminEmail" type="email" autocomplete="username" required placeholder="admin@institucion.gov.co"></label><label>Contraseña<input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Contraseña"></label><button class="primary" type="submit" id="adminLoginBtn">Ingresar</button></form>
+    <div id="adminLoginMessage" class="admin-message" aria-live="polite">El acceso no se habilita por estar en esta página: Supabase debe autenticar al usuario y las políticas de la base de datos deben autorizar la consulta.</div>
+  </div>
+  <div class="admin-dashboard" id="adminDashboard" hidden>
+    <div class="admin-toolbar"><div><div class="eyebrow">PANEL DE CONTROL</div><h2>Base de resultados</h2><p id="adminSessionLabel">Sesión administrativa activa</p></div><button class="secondary-btn" id="adminLogout">Cerrar sesión</button></div>
+    <div class="admin-stats"><article><span>Registros cargados</span><strong id="adminTotal">—</strong></article><article><span>Participantes únicos*</span><strong id="adminPeople">—</strong></article><article><span>Registros aprobados*</span><strong id="adminPassed">—</strong></article><article><span>Última actualización</span><strong id="adminUpdated">—</strong></article></div>
+    <div class="admin-data panel"><div class="admin-data-head"><div><h3>Registros de evaluación</h3><p>*Los indicadores se calculan a partir de los campos disponibles en la tabla.</p></div><button class="secondary-btn" id="adminRefresh">↻ Actualizar</button></div>
+      <div class="admin-filters"><input id="adminSearch" type="search" placeholder="Buscar por nombre, identificación o módulo"><select id="adminModuleFilter"><option value="">Todos los módulos</option><option value="m1">Módulo 1</option><option value="m2">Módulo 2</option><option value="final">Evaluación final</option></select><select id="adminStatusFilter"><option value="">Todos los estados</option><option value="approved">Aprobados</option><option value="not-approved">No aprobados</option></select></div>
+      <div class="admin-export"><button class="primary" id="exportCsv">Descargar CSV</button><button class="primary" id="exportXlsx">Descargar Excel</button><span id="adminRowCount">0 registros</span></div>
+      <div class="admin-table-wrap"><table class="admin-table"><thead id="adminTableHead"></thead><tbody id="adminTableBody"><tr><td>Inicia sesión para consultar los registros.</td></tr></tbody></table></div>
+      <p class="small-note">La tabla muestra las columnas que existan en <code>c4_assessment_results</code>. No se modifica ni elimina información desde este panel.</p>
+    </div>
+  </div>
+</section>
+
 </main>
 </div>
+<script src="js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="js/app.js"></script>
+<script src="js/admin.js"></script>
 </body></html>
