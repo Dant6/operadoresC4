@@ -56,3 +56,59 @@
 
 /* Actividad aplicada del módulo 2 */
 .lesson-content textarea{display:block;width:100%;max-width:100%;min-height:78px;margin:8px 0 16px;padding:12px;border:1px solid #dce6eb;border-radius:9px;background:#fbfdfe;color:var(--ink);font:12px 'DM Sans',sans-serif;line-height:1.6;resize:vertical;outline-color:var(--blue)}
+
+
+/* Correccion de distribucion: titulos de temas en una sola columna legible */
+.lesson-list .lesson>summary{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 24px;
+  gap:17px;
+  align-items:center;
+  width:100%;
+  box-sizing:border-box;
+}
+.lesson-list .lesson>summary .lesson-num{grid-column:1;grid-row:1;}
+.lesson-list .lesson>summary h3{
+  grid-column:2;grid-row:1;min-width:0;width:auto;
+  margin:2px 0;white-space:normal;word-break:normal;overflow-wrap:break-word;
+}
+.lesson-list .lesson>summary::after{grid-column:3;grid-row:1;justify-self:end;margin:0;}
+.lesson-list .lesson>.lesson-content{
+  display:block;min-width:0;width:auto;box-sizing:border-box;
+  padding:0 24px 22px 81px;
+}
+.lesson-list .lesson>.lesson-content p,
+.lesson-list .lesson>.lesson-content li{word-break:normal;overflow-wrap:break-word;}
+@media(max-width:520px){
+ .lesson-list .lesson>summary{grid-template-columns:30px minmax(0,1fr) 20px;gap:12px;padding:16px;}
+ .lesson-list .lesson>summary h3{font-size:14px;}
+ .lesson-list .lesson>.lesson-content{padding:0 16px 16px 58px;}
+}
+
+
+/* Ajuste definitivo de tarjetas desplegables para ambos módulos */
+.lesson-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%;min-width:0}
+.lesson-list .lesson{display:block;width:100%;min-width:0;padding:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:14px}
+.lesson-list .lesson>summary{display:grid;grid-template-columns:46px minmax(0,1fr) 28px;align-items:center;gap:16px;width:100%;min-width:0;padding:16px 22px;cursor:pointer;list-style:none}
+.lesson-list .lesson>summary::-webkit-details-marker{display:none}
+.lesson-list .lesson>summary .lesson-num{grid-column:1;grid-row:1;flex:none}
+.lesson-list .lesson>summary h3{grid-column:2;grid-row:1;min-width:0;margin:0;font:800 16px Manrope,sans-serif;line-height:1.35;overflow-wrap:normal;word-break:normal;white-space:normal}
+.lesson-list .lesson>summary::after{content:'＋';grid-column:3;grid-row:1;justify-self:end;color:#168c80;font-size:21px;font-weight:700;margin:0}
+.lesson-list .lesson[open]>summary::after{content:'−'}
+.lesson-list .lesson>.lesson-content{display:block;width:100%;min-width:0;padding:4px 26px 24px 84px;line-height:1.7}
+.lesson-list .lesson>.lesson-content p,.lesson-list .lesson>.lesson-content li{overflow-wrap:break-word;word-break:normal;line-height:1.7}
+@media(max-width:700px){.lesson-list .lesson>summary{grid-template-columns:36px minmax(0,1fr) 22px;gap:12px;padding:15px 16px}.lesson-list .lesson>summary h3{font-size:14px}.lesson-list .lesson>.lesson-content{padding:2px 16px 18px 64px}}
+
+
+/* Ajuste definitivo de tarjetas desplegables para ambos módulos */
+.lesson-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:100%;min-width:0}
+.lesson-list .lesson{display:block;width:100%;min-width:0;padding:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:14px}
+.lesson-list .lesson>summary{display:grid;grid-template-columns:46px minmax(0,1fr) 28px;align-items:center;gap:16px;width:100%;min-width:0;padding:16px 22px;cursor:pointer;list-style:none}
+.lesson-list .lesson>summary::-webkit-details-marker{display:none}
+.lesson-list .lesson>summary .lesson-num{grid-column:1;grid-row:1;flex:none}
+.lesson-list .lesson>summary h3{grid-column:2;grid-row:1;min-width:0;margin:0;font:800 16px Manrope,sans-serif;line-height:1.35;overflow-wrap:normal;word-break:normal;white-space:normal}
+.lesson-list .lesson>summary::after{content:'＋';grid-column:3;grid-row:1;justify-self:end;color:#168c80;font-size:21px;font-weight:700;margin:0}
+.lesson-list .lesson[open]>summary::after{content:'−'}
+.lesson-list .lesson>.lesson-content{display:block;width:100%;min-width:0;padding:4px 26px 24px 84px;line-height:1.7}
+.lesson-list .lesson>.lesson-content p,.lesson-list .lesson>.lesson-content li{overflow-wrap:break-word;word-break:normal;line-height:1.7}
+@media(max-width:700px){.lesson-list .lesson>summary{grid-template-columns:36px minmax(0,1fr) 22px;gap:12px;padding:15px 16px}.lesson-list .lesson>summary h3{font-size:14px}.lesson-list .lesson>.lesson-content{padding:2px 16px 18px 64px}}
