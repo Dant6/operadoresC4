@@ -30,3 +30,29 @@
 .assessment-fold[open]>summary::after{content:'−'}
 .assessment-fold .assessment{margin:0;border:0;border-top:1px solid var(--line);border-radius:0}
 @media(max-width:520px){.lesson-list .lesson>summary{grid-template-columns:30px 1fr;padding:16px;gap:12px}.lesson-list .lesson>.lesson-content{padding:0 16px 16px 58px}}
+
+/* Contenido ampliado del módulo 1: emociones, R.E.G. y práctica */
+.m1-lessons .lesson>summary{grid-template-columns:42px minmax(0,1fr) 24px}
+.m1-lessons .lesson>summary::after{grid-column:3;grid-row:1}
+.m1-lessons .lesson>summary h3{grid-column:2;grid-row:1}
+.lesson-content h4{font:800 14px Manrope;color:#1c5960;margin:22px 0 8px}
+.lesson-content ul,.lesson-content ol,.objective ul{font-size:12px;color:#647783;line-height:1.8;padding-left:21px}
+.emotion-functions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}
+.emotion-functions article,.emotion-grid article,.breath-steps>div{background:#f4f8f9;border:1px solid #e5edf0;border-radius:11px;padding:13px}
+.emotion-functions b,.breath-steps b{font:800 12px Manrope;color:#168c80}
+.emotion-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}
+.emotion-grid article{text-align:center}
+.emotion-grid article span{display:block;font-size:28px;margin-bottom:5px}
+.emotion-grid article b{font:800 11px Manrope;color:#244d5a}
+.emotion-grid article p,.emotion-functions article p,.breath-steps p{font-size:11px;margin:6px 0 0}
+.breath-steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.practice-reg{display:grid;gap:13px;margin-top:16px;padding:17px;background:#f6f9fa;border-radius:12px}
+.practice-reg label{display:grid;gap:7px;font-size:12px;color:#365463}
+.practice-reg label span{font-weight:400;color:#6c7c87}
+.practice-reg select,.practice-reg textarea{width:100%;border:1px solid #dce6eb;border-radius:8px;padding:11px;font:12px 'DM Sans',sans-serif;background:#fff;color:#334}
+.practice-reg textarea{resize:vertical}
+@media(max-width:700px){.emotion-functions,.emotion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.breath-steps{grid-template-columns:1fr}}
+@media(max-width:430px){.emotion-functions,.emotion-grid{grid-template-columns:1fr}.m1-lessons .lesson>summary{grid-template-columns:30px minmax(0,1fr) 20px}.m1-lessons .lesson>summary h3{font-size:14px}}
+
+/* Actividad aplicada del módulo 2 */
+.lesson-content textarea{display:block;width:100%;max-width:100%;min-height:78px;margin:8px 0 16px;padding:12px;border:1px solid #dce6eb;border-radius:9px;background:#fbfdfe;color:var(--ink);font:12px 'DM Sans',sans-serif;line-height:1.6;resize:vertical;outline-color:var(--blue)}

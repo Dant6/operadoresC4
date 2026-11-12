@@ -20,6 +20,17 @@ document.querySelectorAll('.view[id^="m"] .lesson-list .lesson').forEach((lesson
 });
 // Se oculta el selector antiguo: los temas ahora se despliegan individualmente.
 document.querySelectorAll('.topic-intro,.topic-filter').forEach(el=>{el.style.display='none';});
+// Copia las respuestas de la actividad R.E.G. para que el participante pueda conservarlas.
+document.getElementById('copyPractice')?.addEventListener('click',async()=>{
+ const emotion=document.getElementById('practiceEmotion')?.value||'Sin respuesta';
+ const explore=document.getElementById('practiceExplore')?.value.trim()||'Sin respuesta';
+ const manage=document.getElementById('practiceManage')?.value.trim()||'Sin respuesta';
+ const content='Actividad R.E.G. – Módulo 1\nRECONOCER: '+emotion+'\nEXPLORAR: '+explore+'\nGESTIONAR: '+manage;
+ const status=document.getElementById('practiceCopyStatus');
+ try{await navigator.clipboard.writeText(content);status.textContent='Respuestas copiadas. Puedes pegarlas en tus notas.';}
+ catch(e){status.textContent='No fue posible copiar automáticamente. Selecciona y copia tus respuestas manualmente.';}
+});
+
 
 // Registro de participante. Se conserva en el navegador y se usa para identificar envíos.
 const profileName=document.getElementById('operatorName');
