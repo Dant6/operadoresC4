@@ -30,8 +30,8 @@
   <div class="hero-art"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orbit-label">123<br><small>ESCUCHAR · COMPRENDER · RESPONDER</small></div></div></div>
   <div class="registration panel">
     <div><div class="eyebrow">IDENTIFICACIÓN DEL PARTICIPANTE</div><h2>Antes de comenzar</h2><p>Registra tus datos para identificar el avance y el resultado en este dispositivo.</p></div>
-    <div class="registration-fields"><label>Nombre completo<input id="operatorName" type="text" placeholder="Escribe tu nombre"></label><label>Identificación o código<input id="operatorCode" type="text" placeholder="Documento o código institucional"></label><button class="primary" id="saveProfile">Guardar datos</button></div>
-    <p class="small-note" id="profileStatus">Los datos y resultados se guardan localmente en este navegador; no se envían a una base institucional.</p>
+    <div class="registration-fields"><label>Nombre completo<input id="operatorName" type="text" autocomplete="name" placeholder="Escribe tu nombre" required></label><label>Identificación o código<input id="operatorCode" type="text" autocomplete="off" placeholder="Documento o código institucional" required></label><label class="email-field">Correo electrónico<input id="operatorEmail" type="email" autocomplete="email" placeholder="nombre@correo.com" required></label><button class="primary" id="saveProfile" type="button">Guardar datos</button></div>
+    <p class="small-note" id="profileStatus">Registra tus datos para asociar tus evaluaciones a tu participación. La información se enviará a la base institucional al presentar cada evaluación.</p>
   </div>
   <div class="section-head"><div><div class="eyebrow">CONTENIDO</div><h2>Tu ruta de aprendizaje</h2></div><span class="progress-label" id="progressLabel">0 de 2 completados</span></div>
   <div class="cards">
@@ -66,7 +66,7 @@
     <article class="lesson"><div class="lesson-num">04</div><div><h3>Explorar: comprender el contexto</h3><p>Explorar permite revisar la situación, las reacciones físicas, los pensamientos y la conducta asociada a una emoción.</p><div class="flow"><span>Situación</span><b>→</b><span>Pensamientos</span><b>→</b><span>Reacciones</span><b>→</b><span>Conducta</span></div><p><strong>Preguntas:</strong> ¿qué ocurrió?, ¿qué estoy pensando?, ¿qué necesito?, ¿cómo puedo responder?</p></div></article>
     <article class="lesson"><div class="lesson-num">05</div><div><h3>Gestionar: responder conscientemente</h3><p>Gestionar no significa eliminar ni reprimir la emoción. Consiste en reconocerla y elegir una respuesta que permita continuar la atención de forma consciente y profesional.</p><details><summary>Herramienta 1 · Respiración diafragmática</summary><p>Inhala suavemente llevando el aire hacia el abdomen y exhala sin forzar. Practica unas respiraciones lentas cuando el contexto lo permita.</p></details><details><summary>Herramienta 2 · Atención a los sentidos</summary><p>Dirige la atención al presente: observa un objeto, identifica sonidos cercanos o siente el contacto de los pies con el suelo. Esta práctica puede ayudar a volver al momento actual.</p></details></div></article>
   </div>
-  <div class="assessment panel" id="assessment-m1"></div>
+  <details class="assessment-fold"><summary>Iniciar evaluación del módulo 1</summary><div class="assessment panel" id="assessment-m1"></div></details>
   <button class="primary next" data-go="m2">Continuar al módulo 2 →</button>
 </section>
 <section class="view" id="m2">
@@ -85,7 +85,7 @@
     <article class="lesson"><div class="lesson-num">04</div><div><h3>Clasificar y gestionar</h3><p>Con la información clarificada, se identifica el tipo de incidente, posibles riesgos y necesidades de atención. La gestión se realiza siguiendo los procedimientos y protocolos establecidos, incluida la transferencia cuando corresponda.</p><div class="flow"><span>Recibir</span><b>→</b><span>Clarificar</span><b>→</b><span>Clasificar</span><b>→</b><span>Gestionar</span></div></div></article>
     <article class="lesson"><div class="lesson-num">05</div><div><h3>Lenguaje verbal: claridad, especificidad y congruencia</h3><p><strong>Claridad:</strong> expresar mensajes comprensibles y evitar ambigüedades.</p><p><strong>Especificidad:</strong> solicitar o describir información concreta.</p><p><strong>Congruencia:</strong> mantener coherencia entre las palabras, el tono, el volumen y la velocidad.</p><div class="example"><span>EN LUGAR DE</span><p>“¿Qué está pasando por ahí?”</p><span>UTILIZA</span><p>“¿En qué lugar ocurre y qué está sucediendo exactamente?”</p></div></div></article>
   </div>
-  <div class="assessment panel" id="assessment-m2"></div>
+  <details class="assessment-fold"><summary>Iniciar evaluación del módulo 2</summary><div class="assessment panel" id="assessment-m2"></div></details>
   <button class="primary next" data-go="home">Volver al inicio ↗</button>
 </section>
 <footer><span>CAPACITACIÓN PSICOSOCIAL · C4 · LÍNEA 123</span><span>Material de familiarización</span></footer>
@@ -101,7 +101,7 @@
     <div class="admin-toolbar"><div><div class="eyebrow">PANEL DE CONTROL</div><h2>Base de resultados</h2><p id="adminSessionLabel">Sesión administrativa activa</p></div><button class="secondary-btn" id="adminLogout">Cerrar sesión</button></div>
     <div class="admin-stats"><article><span>Registros cargados</span><strong id="adminTotal">—</strong></article><article><span>Participantes únicos*</span><strong id="adminPeople">—</strong></article><article><span>Registros aprobados*</span><strong id="adminPassed">—</strong></article><article><span>Última actualización</span><strong id="adminUpdated">—</strong></article></div>
     <div class="admin-data panel"><div class="admin-data-head"><div><h3>Registros de evaluación</h3><p>*Los indicadores se calculan a partir de los campos disponibles en la tabla.</p></div><button class="secondary-btn" id="adminRefresh">↻ Actualizar</button></div>
-      <div class="admin-filters"><input id="adminSearch" type="search" placeholder="Buscar por nombre, identificación o módulo"><select id="adminModuleFilter"><option value="">Todos los módulos</option><option value="m1">Módulo 1</option><option value="m2">Módulo 2</option><option value="final">Evaluación final</option></select><select id="adminStatusFilter"><option value="">Todos los estados</option><option value="approved">Aprobados</option><option value="not-approved">No aprobados</option></select></div>
+      <div class="admin-filters"><input id="adminSearch" type="search" placeholder="Buscar por nombre, identificación o módulo"><select id="adminModuleFilter"><option value="">Todos los módulos</option><option value="m1">Módulo 1 · Emociones</option><option value="m2">Módulo 2 · Comunicación</option></select><select id="adminStatusFilter"><option value="">Todos los estados</option><option value="approved">Aprobados</option><option value="not-approved">No aprobados</option></select></div>
       <div class="admin-export"><button class="primary" id="exportCsv">Descargar CSV</button><button class="primary" id="exportXlsx">Descargar Excel</button><span id="adminRowCount">0 registros</span></div>
       <div class="admin-table-wrap"><table class="admin-table"><thead id="adminTableHead"></thead><tbody id="adminTableBody"><tr><td>Inicia sesión para consultar los registros.</td></tr></tbody></table></div>
       <p class="small-note">La tabla muestra las columnas que existan en <code>c4_assessment_results</code>. No se modifica ni elimina información desde este panel.</p>

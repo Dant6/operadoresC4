@@ -1,0 +1,3 @@
+-- No es necesario ejecutar este SQL para esta versión.
+-- La identificación/código del participante se almacena dentro del campo JSONB `answers`
+-- para no exigir cambios en el esquema existente.

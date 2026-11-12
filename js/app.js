@@ -6,43 +6,53 @@ document.getElementById('menuBtn').addEventListener('click',()=>document.body.cl
 document.querySelectorAll('.check').forEach(btn=>btn.addEventListener('click',()=>{const q=btn.closest('.quiz'),selected=q.querySelector('input:checked'),feedback=q.querySelector('.feedback');if(!selected){feedback.textContent='Selecciona una respuesta para continuar.';feedback.style.color='#b7791f';return;}const correct=selected.value===btn.dataset.answer;feedback.textContent=correct?'✓ ¡Correcto! '+(btn.dataset.module==='m1'?'Gestionar es reconocer y elegir una respuesta consciente.':'Clarificar permite comprender el significado antes de asumir.'):'✕ Revisa el contenido del módulo e inténtalo nuevamente.';feedback.style.color=correct?'#148d80':'#b64a4a';if(correct){localStorage.setItem('c4_'+btn.dataset.module+'_practice','done');updateProgress();}}));
 function updateProgress(){const count=['m1','m2'].filter(m=>localStorage.getItem('c4_'+m+'_practice')==='done').length;document.getElementById('progressLabel').textContent=count+' de 2 prácticas completadas';}
 updateProgress();
-// Cada módulo presenta sus temáticas como apartados seleccionables.
-document.querySelectorAll('.view[id^="m"] .lesson-list').forEach((list)=>{
-  const section=list.closest('.view');
-  const filter=section.querySelector('.topic-filter');
-  const lessons=[...list.querySelectorAll('.lesson')];
-  if(!filter || !lessons.length) return;
-  list.classList.add('topic-mode');
-  const count=document.createElement('p'); count.className='topic-count'; count.setAttribute('aria-live','polite');
-  filter.after(count);
-  function selectTopic(index){
-    lessons.forEach((lesson,i)=>lesson.classList.toggle('topic-active',i===index));
-    [...filter.querySelectorAll('button')].forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-pressed',i===index?'true':'false');});
-    count.textContent=`Temática ${index+1} de ${lessons.length}`;
-  }
-  lessons.forEach((lesson,index)=>{
-    const title=lesson.querySelector('h3')?.textContent?.trim() || `Temática ${index+1}`;
-    const button=document.createElement('button');button.type='button';button.textContent=`${String(index+1).padStart(2,'0')} · ${title}`;
-    button.addEventListener('click',()=>selectTopic(index));filter.appendChild(button);
-  });
-  selectTopic(0);
+// Cada temática se convierte en un desplegable independiente; pueden abrirse varias a la vez.
+document.querySelectorAll('.view[id^="m"] .lesson-list .lesson').forEach((lesson)=>{
+  if(lesson.tagName.toLowerCase()==='details') return;
+  const heading=lesson.querySelector('h3');
+  const number=lesson.querySelector('.lesson-num');
+  if(!heading || !number) return;
+  const summary=document.createElement('summary');
+  summary.append(number,heading);
+  const content=heading.parentElement;content.classList.add('lesson-content');
+  const target=document.createElement('details');target.className='lesson';
+  lesson.replaceWith(target);target.append(summary,content);
 });
+// Se oculta el selector antiguo: los temas ahora se despliegan individualmente.
+document.querySelectorAll('.topic-intro,.topic-filter').forEach(el=>{el.style.display='none';});
 
-// Registro local del participante y evaluaciones de 10 preguntas por módulo.
+// Registro de participante. Se conserva en el navegador y se usa para identificar envíos.
 const profileName=document.getElementById('operatorName');
 const profileCode=document.getElementById('operatorCode');
+const profileEmail=document.getElementById('operatorEmail');
 const profileStatus=document.getElementById('profileStatus');
 const savedProfile=JSON.parse(localStorage.getItem('c4_profile')||'{}');
 if(profileName) profileName.value=savedProfile.name||'';
 if(profileCode) profileCode.value=savedProfile.code||'';
+if(profileEmail) profileEmail.value=savedProfile.email||'';
 if(profileStatus && savedProfile.name) profileStatus.textContent='Participante registrado en este navegador: '+savedProfile.name;
+function currentProfile(){return {name:profileName?.value.trim()||'',code:profileCode?.value.trim()||'',email:profileEmail?.value.trim().toLowerCase()||''};}
+function profileIsValid(p){return Boolean(p.name && p.code && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email));}
 document.getElementById('saveProfile')?.addEventListener('click',()=>{
-  const name=profileName.value.trim(), code=profileCode.value.trim();
-  if(!name||!code){profileStatus.textContent='Completa el nombre y la identificación o código para continuar.';profileStatus.style.color='#b64a4a';return;}
-  localStorage.setItem('c4_profile',JSON.stringify({name,code}));
-  profileStatus.textContent='Datos guardados en este navegador. Puedes continuar con los módulos.';
-  profileStatus.style.color='#148d80';
+  const p=currentProfile();
+  if(!profileIsValid(p)){profileStatus.textContent='Completa nombre, identificación/código y un correo electrónico válido.';profileStatus.style.color='#b64a4a';return;}
+  localStorage.setItem('c4_profile',JSON.stringify(p));
+  profileStatus.textContent='Datos guardados. Tus evaluaciones se asociarán a este registro.';profileStatus.style.color='#148d80';
 });
+function supabaseClient(){
+  if(!window.supabase?.createClient || !window.C4_SUPABASE_URL || !window.C4_SUPABASE_ANON_KEY || window.C4_SUPABASE_ANON_KEY.includes('PEGA_AQUI')) return null;
+  if(!window.__c4PublicClient) window.__c4PublicClient=window.supabase.createClient(window.C4_SUPABASE_URL,window.C4_SUPABASE_ANON_KEY);
+  return window.__c4PublicClient;
+}
+async function saveAssessmentToCloud(moduleId,score,total,percent){
+  const p=JSON.parse(localStorage.getItem('c4_profile')||'{}');
+  const db=supabaseClient();
+  if(!db) throw new Error('La conexión de Supabase aún no está configurada en js/config.js.');
+  const payload={participant_name:p.name,participant_email:p.email,module_code:moduleId==='m1'?'emotions':'communication',correct_answers:score,total_questions:total,score:percent,answers:{identification_code:p.code}};
+  const {error}=await db.from('c4_assessment_results').insert(payload);
+  if(error) throw error;
+}
+
 const exams={
  m1:[
  ['¿Cuál es la función general de las emociones?',['Impedir que actuemos','Ayudarnos a interpretar situaciones y prepararnos para responder','Demostrar debilidad'],1],
@@ -82,15 +92,17 @@ function renderExam(moduleId){
  });
  const submit=document.createElement('button');submit.type='submit';submit.className='primary';submit.textContent='Calificar evaluación';
  const feedback=document.createElement('div');feedback.className='exam-result';feedback.setAttribute('aria-live','polite');
- form.append(submit,feedback);form.addEventListener('submit',e=>{
-   e.preventDefault();let score=0,answered=0;
+ form.append(submit,feedback);form.addEventListener('submit',async e=>{
+   e.preventDefault();const participant=currentProfile();if(!profileIsValid(participant)){feedback.textContent='Antes de presentar la evaluación, registra nombre, identificación/código y correo válido en la página de inicio.';feedback.className='exam-result warning';return;}localStorage.setItem('c4_profile',JSON.stringify(participant));let score=0,answered=0;
    questions.forEach((q,i)=>{const selected=form.querySelector('input[name="'+moduleId+'_'+i+'"]:checked');if(selected){answered++;if(Number(selected.value)===q[2])score++;}});
    if(answered!==questions.length){feedback.textContent='Responde las 10 preguntas antes de calificar. Llevas '+answered+'/10.';feedback.className='exam-result warning';return;}
    const percent=Math.round(score/questions.length*100),passed=percent>=70;
    const result={score,percent,passed,date:new Date().toISOString()};
    localStorage.setItem('c4_exam_'+moduleId,JSON.stringify(result));
+   submit.disabled=true;submit.textContent='Guardando resultado…';
+   let cloudMessage='';try{await saveAssessmentToCloud(moduleId,score,questions.length,percent);cloudMessage='<p>Resultado enviado correctamente a la base institucional.</p>';}catch(err){cloudMessage='<p><strong>No se pudo enviar a la base institucional:</strong> '+String(err.message||err).replace(/[<>]/g,'')+'. El intento quedó guardado únicamente en este navegador; informa al equipo administrador antes de cerrar la página.</p>';}finally{submit.disabled=false;submit.textContent='Calificar evaluación';}
    feedback.className='exam-result '+(passed?'success':'warning');
-   feedback.innerHTML='<strong>Resultado: '+score+'/10 ('+percent+' %)</strong><p>'+(passed?'¡Módulo aprobado! Ya puedes continuar.':'Aún no alcanzas el 70 %. Repasa las temáticas y vuelve a intentarlo.')+'</p>';
+   feedback.innerHTML='<strong>Resultado: '+score+'/10 ('+percent+' %)</strong><p>'+(passed?'¡Módulo aprobado! Ya puedes continuar.':'Aún no alcanzas el 70 %. Repasa las temáticas y vuelve a intentarlo.')+'</p>'+cloudMessage;
    updateFinalAvailability();
  });
  root.appendChild(form);
