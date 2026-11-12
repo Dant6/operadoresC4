@@ -17,10 +17,12 @@
 .registration-fields .email-field{grid-column:1/-1}
 .lesson-list.topic-mode .lesson{display:grid}
 .lesson-list .lesson{display:block;padding:0;overflow:hidden}
-.lesson-list .lesson>summary{display:grid;grid-template-columns:42px 1fr;gap:17px;align-items:center;padding:18px 22px;cursor:pointer;list-style:none}
+.lesson-list .lesson>summary{display:grid;grid-template-columns:42px minmax(0,1fr) 24px;gap:17px;align-items:center;padding:18px 22px;cursor:pointer;list-style:none;min-width:0}
+.lesson-list .lesson>summary h3{grid-column:2;grid-row:1;min-width:0;overflow-wrap:break-word;word-break:normal;margin:2px 0}
+.lesson-list .lesson>summary::after{content:"＋";grid-column:3;grid-row:1;justify-self:end;margin:0;color:#168c80;font-size:20px;font-weight:700}
+.lesson-list .lesson[open]>summary::after{content:"−"}
 .lesson-list .lesson>summary::-webkit-details-marker{display:none}
-.lesson-list .lesson>summary::after{content:'＋';margin-left:auto;color:#168c80;font-size:20px;font-weight:700;grid-column:2;grid-row:1;justify-self:end}
-.lesson-list .lesson[open]>summary::after{content:'−'}
+
 .lesson-list .lesson>summary h3{margin:2px 34px 2px 0}
 .lesson-list .lesson>.lesson-content{padding:0 22px 20px 81px}
 .assessment-fold{margin:24px 0 18px;background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}
@@ -29,7 +31,7 @@
 .assessment-fold>summary::after{content:'＋';float:right;font-size:18px}
 .assessment-fold[open]>summary::after{content:'−'}
 .assessment-fold .assessment{margin:0;border:0;border-top:1px solid var(--line);border-radius:0}
-@media(max-width:520px){.lesson-list .lesson>summary{grid-template-columns:30px 1fr;padding:16px;gap:12px}.lesson-list .lesson>.lesson-content{padding:0 16px 16px 58px}}
+@media(max-width:520px){.lesson-list .lesson>summary{grid-template-columns:30px minmax(0,1fr) 20px;padding:16px;gap:12px}.lesson-list .lesson>.lesson-content{padding:0 16px 16px 58px}}
 
 /* Contenido ampliado del módulo 1: emociones, R.E.G. y práctica */
 .m1-lessons .lesson>summary{grid-template-columns:42px minmax(0,1fr) 24px}
